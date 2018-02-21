@@ -44,9 +44,12 @@ for (let k in notes) {
 }
 
 const major = [2,2,1,2,2,2,1]
-const minor = [2,1,2,2,1,2,2]
+const naturalMinor = [2,1,2,2,1,2,2]
+const harmonicMinor = [2,1,2,2,1,3,1]
+const melodicMinor = [2,1,2,2,2,2,1]
+const lydian = [2,2,2,1,2,2,1]
 
-function generateScale(init = 'c', isMajor = true, limit = 7) {
+function generateScale(init = 'c', scaleType = 'major', limit = 7) {
   let newNotes = []
 
   if (limit < 3) {
@@ -65,27 +68,36 @@ function generateScale(init = 'c', isMajor = true, limit = 7) {
     newSubScale = newSubScale.concat(noteArr.slice(0, noteInitIdx))
   }
 
-  if (isMajor) {
-    const majorRdc = major.slice(0, limit - 1)
-    newNotes.push(newSubScale[0])
+  let rdc
 
-    let currIdx = 0
-
-    majorRdc.forEach(function (m, idx) {
-      newNotes.push(newSubScale[currIdx + m])
-      currIdx = currIdx + m
-    })
-  } else {
-    const minorRdc = minor.slice(0, limit - 1)
-    newNotes.push(newSubScale[0])
-
-    let currIdx = 0
-
-    minorRdc.forEach(function (m, idx) {
-      newNotes.push(newSubScale[currIdx + m])
-      currIdx = currIdx + m
-    })
+  switch (scaleType) {
+    case 'major':
+      rdc = major.slice(0, limit - 1)
+      break
+    case 'naturalMinor':
+      rdc = naturalMinor.slice(0, limit - 1)
+      break
+    case 'harmonicMinor':
+      rdc = harmonicMinor.slice(0, limit - 1)
+      break
+    case 'melodicMinor':
+      rdc = melodicMinor.slice(0, limit - 1)
+      break
+    case 'lydian':
+      rdc = lydian.slice(0, limit - 1)
+      break
+    default:
+      break
   }
+
+  newNotes.push(newSubScale[0])
+
+  let currIdx = 0
+
+  rdc.forEach(function (m, idx) {
+    newNotes.push(newSubScale[currIdx + m])
+    currIdx = currIdx + m
+  })
   console.log(newNotes)
   return newNotes
 }
