@@ -38,9 +38,11 @@ const notes = {
 }
 
 let noteArr = []
+let noteAltArr = []
 
 for (let k in notes) {
   noteArr.push(k)
+  noteAltArr.push(notes[k].alt)
 }
 
 const major = [2,2,1,2,2,2,1]
@@ -56,10 +58,13 @@ function generateScale(init = 'c', scaleType = 'major', limit = 7) {
     throw new Error('need a minimum of 3 notes.')
   }
 
-  const noteInitIdx = noteArr.indexOf(init.toLowerCase())
+  let noteInitIdx = noteArr.indexOf(init.toLowerCase())
 
   if (noteInitIdx < 0) {
-    throw new Error('not a valid note to start from. try c to start.')
+    noteInitIdx = noteAltArr.indexOf(init.toLowerCase())
+    if (!noteInitIdx) {
+      throw new Error('not a valid note to start from. try c to start.')
+    }
   }
 
   let newSubScale = noteArr.slice(noteInitIdx)
@@ -74,6 +79,7 @@ function generateScale(init = 'c', scaleType = 'major', limit = 7) {
     case 'major':
       rdc = major.slice(0, limit - 1)
       break
+    case 'minor':
     case 'naturalMinor':
       rdc = naturalMinor.slice(0, limit - 1)
       break
